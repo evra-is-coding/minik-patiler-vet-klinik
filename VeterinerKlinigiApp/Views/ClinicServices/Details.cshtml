@@ -1,0 +1,31 @@
+﻿@model VeterinerKlinigiApp.Models.ClinicService
+
+@{
+    ViewData["Title"] = "Hizmet Detayı";
+}
+
+<h2 class="mb-3">Hizmet Detayı</h2>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ClinicId)</dt>
+            <dd class="col-sm-9">@(Model.Clinic?.Name ?? "-")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+            <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DurationMinutes)</dt>
+            <dd class="col-sm-9">@Model.DurationMinutes dakika</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
+            <dd class="col-sm-9">@Model.Price.ToString("N2") ₺</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+<a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
