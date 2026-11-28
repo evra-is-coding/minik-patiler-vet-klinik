@@ -1,0 +1,72 @@
+﻿@model VeterinerKlinigiApp.Models.Veterinarian
+
+@{
+    ViewData["Title"] = "Veteriner Hekim Detayı";
+}
+
+<h2 class="mb-3">Veteriner Hekim Detayı</h2>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FullName)</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Specialty)</dt>
+            <dd class="col-sm-9">@Model.Specialty</dd>
+
+            <dt class="col-sm-3">Klinik</dt>
+            <dd class="col-sm-9">@(Model.Clinic?.Name ?? "-")</dd>
+        </dl>
+    </div>
+</div>
+
+<h4 class="mb-2">Verebildiği Hizmetler</h4>
+@if (Model.VeterinarianServices != null && Model.VeterinarianServices.Any())
+{
+    <ul class="list-group mb-3">
+        @foreach (var vs in Model.VeterinarianServices)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>@vs.ClinicService?.Name</span>
+                <span class="text-muted">
+                    @(vs.ClinicService?.DurationMinutes ?? 0) dk | @((vs.ClinicService?.Price ?? 0m).ToString("N2")) ₺
+                </span>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p class="text-muted">Bu hekime tanımlanmış hizmet bulunmuyor.</p>
+}
+
+<h4 class="mb-2">Müsaitlik Saatleri</h4>
+@if (Model.Availabilities != null && Model.Availabilities.Any())
+{
+    <table class="table table-bordered table-sm mb-3">
+        <thead class="table-light">
+            <tr>
+                <th>Başlangıç</th>
+                <th>Bitiş</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var slot in Model.Availabilities.OrderBy(a => a.StartTime))
+            {
+                <tr>
+                    <td>@slot.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@slot.EndTime.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">Bu hekim için kayıtlı müsaitlik saati bulunmuyor.</p>
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+<a asp-controller="VeterinarianAvailabilities" asp-action="Create" asp-route-veterinarianId="@Model.Id" class="btn btn-success">Müsaitlik Ekle</a>
+<a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>  

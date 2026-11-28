@@ -1,0 +1,75 @@
+﻿@model VeterinerKlinigiApp.Models.Veterinarian
+@using VeterinerKlinigiApp.Models
+
+@{
+    ViewData["Title"] = "Yeni Veteriner Hekim Ekle";
+    var allServices = ViewBag.AllServices as List<ClinicService> ?? new List<ClinicService>();
+    var selectedIds = ViewBag.SelectedServiceIds as int[] ?? Array.Empty<int>();
+}
+
+<h2 class="mb-3">Yeni Veteriner Hekim Ekle</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Specialty" class="form-label"></label>
+                <input asp-for="Specialty" class="form-control" />
+                <span asp-validation-for="Specialty" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ClinicId" class="form-label">Klinik</label>
+                <select asp-for="ClinicId" asp-items="ViewBag.ClinicId" class="form-select">
+                    <option value="">-- Klinik Seçiniz --</option>
+                </select>
+                <span asp-validation-for="ClinicId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Verebildiği Hizmetler</label>
+                @if (allServices.Any())
+                {
+                    <div class="border rounded p-3">
+                        @foreach (var service in allServices)
+                        {
+                            var isChecked = selectedIds.Contains(service.Id);
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="selectedServiceIds"
+                                       value="@service.Id"
+                                       id="service_@service.Id"
+                                @(isChecked ? "checked" : "") />
+                                <label class="form-check-label" for="service_@service.Id">
+                                    @service.Name (@(service.Clinic?.Name ?? "Klinik Yok") - @service.DurationMinutes dk - @service.Price.ToString("N2") ₺)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">Henüz tanımlı klinik hizmeti bulunmuyor. İsterseniz önce Hizmetler ekranından hizmet ekleyebilirsiniz.</p>
+                }
+            </div>
+
+            <button type="submit" class="btn btn-success">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}   

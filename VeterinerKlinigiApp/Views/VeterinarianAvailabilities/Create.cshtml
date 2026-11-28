@@ -1,0 +1,45 @@
+﻿@model VeterinerKlinigiApp.Models.VeterinarianAvailability
+
+@{
+    ViewData["Title"] = "Yeni Müsaitlik Ekle";
+}
+
+<h2 class="mb-3">Yeni Müsaitlik Ekle</h2>
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="VeterinarianId" class="form-label">Veteriner Hekim</label>
+                <select asp-for="VeterinarianId" asp-items="ViewBag.VeterinarianId" class="form-select">
+                    <option value="">-- Hekim Seçiniz --</option>
+                </select>
+                <span asp-validation-for="VeterinarianId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label">Başlangıç Zamanı</label>
+                <input asp-for="StartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndTime" class="form-label">Bitiş Zamanı</label>
+                <input asp-for="EndTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}  
+
